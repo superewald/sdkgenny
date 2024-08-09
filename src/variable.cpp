@@ -1,3 +1,4 @@
+#include "sdkgenny/namespace.hpp"
 #include <climits>
 
 #include <sdkgenny/struct.hpp>
@@ -57,12 +58,20 @@ Variable* Variable::append() {
     return this;
 }
 
-size_t Variable::size() const {
-    if (m_type == nullptr) {
+Type* Variable::type() {
+    if(m_type == nullptr) {
+        m_type = m_owner->topmost_owner<Namespace>()->resolve_type(m_type_name);
+    }
+
+    return m_type;
+}
+
+size_t Variable::size() {
+    if (type() == nullptr) {
         return 0;
     }
 
-    return m_type->size();
+    return type()->size();
 }
 
 Variable* Variable::bit_append() {
@@ -89,12 +98,12 @@ Variable* Variable::bit_append() {
     return this;
 }
 
-void Variable::generate(std::ostream& os) const {
+void Variable::generate(std::ostream& os) {
     generate_comment(os);
     generate_metadata(os);
-    m_type->generate_typename_for(os, this);
+    type()->generate_typename_for(os, this);
     os << " " << usable_name();
-    m_type->generate_variable_postamble(os);
+    type()->generate_variable_postamble(os);
 
     if (m_bit_size != 0) {
         os << " : " << std::dec << m_bit_size;

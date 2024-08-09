@@ -21,5 +21,7 @@ public:
     Enum* enum_(std::string_view name);
     EnumClass* enum_class(std::string_view name);
     Namespace* namespace_(std::string_view name);
+
+    Type* resolve_type(std::string_view nstype);
 };
 } // namespace sdkgenny
