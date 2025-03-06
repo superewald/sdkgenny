@@ -78,4 +78,16 @@ std::filesystem::path Object::path() {
 
     return p;
 }
+
+void Object::generate_doxygen_tags(std::ostream& os) const {
+    for (auto&& [tag, value] : m_doxy) {
+        os << "* @" << tag << " " << value << "\n";
+    }
+}
+
+void Object::generate_doxygen(std::ostream& os) const {
+    os << "/**\n";
+    generate_doxygen_tags(os);
+    os << "*/\n";
+}
 } // namespace sdkgenny

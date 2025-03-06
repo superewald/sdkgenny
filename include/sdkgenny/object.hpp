@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <vector>
 #include <format>
+#include <regex>
 
 namespace sdkgenny {
 class Struct;
@@ -28,6 +29,23 @@ public:
     const auto& metadata() const { return m_metadata; }
     auto& metadata() { return m_metadata; }
     virtual void generate_metadata(std::ostream& os) const;
+
+    std::string doxy(std::string tag) const { return m_doxy.contains(tag) ? m_doxy.at(tag) : ""; }
+    Object* doxy(std::string_view tag, std::string_view format, auto&&... args) {
+        std::string val = std::vformat(format, std::make_format_args(args...));
+        val = std::regex_replace(val, std::regex("(\n)"), "\n* ");
+        m_doxy[std::string(tag)] = val;
+        return this;
+    }
+
+    std::string brief() const { return doxy("brief"); }
+    Object* brief(std::string_view format, auto&&... args) { return doxy("brief", format, args...); }
+
+    std::string detail() const { return doxy("detail"); }
+    Object* detail(std::string_view format, auto&&... args) { return doxy("detail", format, args...); }
+
+    virtual void generate_doxygen_tags(std::ostream& os) const;
+    virtual void generate_doxygen(std::ostream& os) const;
 
     const std::string& comment() const { return m_comment; }
     Object* comment(std::string_view format, auto&&... args) {
@@ -227,6 +245,7 @@ protected:
     std::vector<std::unique_ptr<Object>> m_children{};
     std::vector<std::string> m_metadata{};
     std::string m_comment{};
+    std::map<std::string, std::string> m_doxy{};
 
     bool m_skip_generation{};
 };
