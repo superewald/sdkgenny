@@ -72,6 +72,7 @@ set(sdkgenny_SOURCES
 	"include/sdkgenny/class.hpp"
 	"include/sdkgenny/constant.hpp"
 	"include/sdkgenny/detail/indent.hpp"
+	"include/sdkgenny/doxygen.hpp"
 	"include/sdkgenny/enum.hpp"
 	"include/sdkgenny/enum_class.hpp"
 	"include/sdkgenny/function.hpp"

@@ -13,7 +13,8 @@ Parameter* Function::param(std::string_view name) {
 }
 
 void Function::generate(std::ostream& os) const {
-    generate_comment(os);
+    //generate_comment(os);
+    generate_doxygen(os);
     generate_prototype(os);
     os << ";\n";
 }
@@ -93,6 +94,18 @@ void Function::generate_procedure(std::ostream& os) const {
             os << "\n";
         }
         os << "}\n";
+    }
+}
+
+void Function::generate_doxygen_tags(std::ostream& os) const {
+    Object::generate_doxygen_tags(os);
+
+    for (auto&& param : get_all<Parameter>()) {
+        os << "* @param " << param->name() << " " << param->doxy("brief") << "\n";
+    }
+
+    if (m_return_value != nullptr) {
+        os << "* @returns " << m_return_value->usable_name() << " " << m_return_value->doxy("brief") <<  "\n";
     }
 }
 } // namespace sdkgenny

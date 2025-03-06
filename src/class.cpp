@@ -9,7 +9,8 @@ void Class::generate_forward_decl(std::ostream& os) const {
 }
 
 void Class::generate(std::ostream& os) const {
-    generate_comment(os);
+    //generate_comment(os);
+    generate_doxygen(os);
     os << "class " << usable_name_decl();
     generate_inheritance(os);
     os << " {\n";

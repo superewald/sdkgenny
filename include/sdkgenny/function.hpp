@@ -43,6 +43,8 @@ public:
     virtual void generate(std::ostream& os) const;
     virtual void generate_source(std::ostream& os) const;
 
+    virtual void generate_doxygen_tags(std::ostream& os) const override;
+
 protected:
     Type* m_return_value{};
     std::string m_procedure{};
